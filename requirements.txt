@@ -1,0 +1,10 @@
+openai
+requests
+beautifulsoup4
+python-dotenv
+tenacity
+loguru
+mypy
+fastapi
+uvicorn
+logtail-python
