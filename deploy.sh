@@ -40,6 +40,10 @@ rebuild_and_restart() {
     echo "Сборка образа $IMAGE_NAME..."
     docker build -t "$IMAGE_NAME" .
 
+    # Удаление старых неиспользуемых образов (dangling images)
+    echo "Очистка старых образов..."
+    docker image prune -f
+
     # Запуск
     start_container
 }
