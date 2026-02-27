@@ -37,7 +37,7 @@ def generate_headlines(article_text: str) -> List[str]:
     """
     logger.info("Отправка запроса к LLM для генерации заголовков.")
     
-    system_prompt = "Ты опытный профессиональный SEO-редактор. Придумай 5 заголовков."
+    system_prompt = "Ты опытный профессиональный SEO-редактор. Придумай 7 заголовков."
     
     try:
         response = client.chat.completions.create(
