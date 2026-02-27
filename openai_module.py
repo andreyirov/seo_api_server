@@ -68,8 +68,8 @@ def generate_headlines(article_text: str) -> List[str]:
             if clean_line:
                 cleaned_headlines.append(clean_line)
         
-        # Ограничиваем список 5 заголовками, если их больше
-        return cleaned_headlines[:5]
+        # Ограничиваем список 7 заголовками, если их больше
+        return cleaned_headlines[:7]
 
     except Exception as e:
         logger.error(f"Ошибка при обращении к API OpenAI: {e}")
