@@ -7,10 +7,11 @@ export OPENAPIURL="https://openai.api.proxyapi.ru/v1"
 export BETTERSTACK_TOKEN="your_token_here"
 
 # Настройки
-REPO_URL="https://github.com/andreyirov/seo_generator.git"
-REPO_DIR="/app/seo_generator" # Путь, куда будет клонироваться репо
+REPO_URL="https://github.com/andreyirov/seo_api_server.git"
+REPO_DIR="/app/seo_api_server" # Путь, куда будет клонироваться репо
 CONTAINER_NAME="seo-app"
 IMAGE_NAME="seo-generator"
+BRANCH_NAME="main"
 
 # Функция для запуска контейнера
 start_container() {
@@ -46,7 +47,7 @@ rebuild_and_restart() {
 # Проверка наличия директории репозитория
 if [ ! -d "$REPO_DIR" ]; then
     echo "Репозиторий не найден. Клонируем..."
-    git clone "$REPO_URL" "$REPO_DIR"
+    git clone -b "$BRANCH_NAME" "$REPO_URL" "$REPO_DIR"
     cd "$REPO_DIR" || exit 1
     
     # Первичная сборка и запуск
@@ -56,6 +57,9 @@ fi
 
 cd "$REPO_DIR" || exit 1
 
+# Убедимся, что мы на нужной ветке
+git checkout "$BRANCH_NAME"
+
 # Получаем хэш текущего коммита
 LOCAL_HASH=$(git rev-parse HEAD)
 
@@ -63,7 +67,7 @@ LOCAL_HASH=$(git rev-parse HEAD)
 git fetch origin
 
 # Получаем хэш удаленного коммита
-REMOTE_HASH=$(git rev-parse origin/main)
+REMOTE_HASH=$(git rev-parse "origin/$BRANCH_NAME")
 
 # Проверяем, запущен ли контейнер
 CONTAINER_RUNNING=$(docker ps -q -f name=$CONTAINER_NAME)
@@ -75,7 +79,7 @@ if [ "$LOCAL_HASH" != "$REMOTE_HASH" ] || [ -z "$CONTAINER_RUNNING" ]; then
         echo "Удаленный: $REMOTE_HASH"
         
         # Обновляем код
-        git pull origin main
+        git pull origin "$BRANCH_NAME"
     else
         echo "Контейнер не запущен, но код актуален."
     fi
